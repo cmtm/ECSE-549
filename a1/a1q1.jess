@@ -6,15 +6,15 @@
 ; when driving, robot can be "moving" or "stopped"
 ; there can be a car that has priority over it. in which case he needs
 ; to wait until said car has passed and the robot can safely "go"
-; (priority no) means he has to wait. In it's abscence he can go.
-; other cars or pedestriand can either be going perpendicular or parallel (oncomming)
-; (other perpendicular) (other parallel). The abscence of one of these
+; (priority no) means he has to wait. In it's absence he can go.
+; other cars or pedestrians can either be going perpendicular or parallel (oncoming)
+; (other perpendicular) (other parallel). The absence of one of these
 ; indicates no other car/pedestrian is waiting.
 ; This fact is ignored on a blinking green light however. 
 ; the robot has a direction: (direction straight) (direction right) (direction left)
 
 ; NOTE: doesn't yield to pedestrians when turning right!!
-; can use walk-sign and new (other right-parallel) or somthing if
+; can use walk-sign and new (other right-parallel) or something if
 ; this functionality is to be added
 
 (deftemplate robot (slot status) (slot motion-state))
@@ -118,7 +118,7 @@
 (printout t crlf "other parallel and going straight. light blinking-red." crlf)
 (reset)
 (assert (robot (status driving) (motion-state stopped)))
-(assert (other paralle))
+(assert (other parallel))
 (assert (direction straight))
 (assert (light blinking-red))
 (run)
@@ -130,7 +130,7 @@
 (printout t crlf "don't walk sign" crlf)
 (reset)
 (assert (robot (status walking) (motion-state stopped)))
-(assert (walk-sign dont-walk))
+(assert (walk-sign don't-walk))
 (run)
 
 (printout t crlf "walk sign" crlf)
