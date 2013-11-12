@@ -1,0 +1,60 @@
+;; Run 1
+
+Jess, the Rule Engine for the Java Platform
+Copyright (C) 2008 Sandia Corporation
+Jess Version 7.1p2 11/5/2008
+
+Is the tyre pressure between 28 and 32 lbs? (y/n) n
+Does the oil dipstick indicate full? (y/n) n
+Does the engine turn over when the ignition key is turned? (y/n) n
+Do the car lights work? (y/n) n
+Does the fuel gauge not read empty? (y/n) n
+
+
+There isn't any gas in the car.
+Can't diagnose starter motor without working battery.
+The battery isn't working.
+The oil is low.
+The tyres aren't inflated properly.
+
+;; Run 2
+
+Jess, the Rule Engine for the Java Platform
+Copyright (C) 2008 Sandia Corporation
+Jess Version 7.1p2 11/5/2008
+
+Is the tyre pressure between 28 and 32 lbs? (y/n) y
+Does the oil dipstick indicate full? (y/n) y
+Does the engine turn over when the ignition key is turned? (y/n) y
+Do the car lights work? (y/n) y
+Does the fuel gauge not read empty? (y/n) n
+
+
+There isn't any gas in the car.
+
+;; Run 3
+
+Jess, the Rule Engine for the Java Platform
+Copyright (C) 2008 Sandia Corporation
+Jess Version 7.1p2 11/5/2008
+
+Is the tyre pressure between 28 and 32 lbs? (y/n) n
+Does the oil dipstick indicate full? (y/n) y
+Does the engine turn over when the ignition key is turned? (y/n) n
+Do the car lights work? (y/n) y
+Does the fuel gauge not read empty? (y/n) y
+
+
+The starter motor isn't working.
+The tyres aren't inflated properly.
+
+;; Run 4
+
+Jess, the Rule Engine for the Java Platform
+Copyright (C) 2008 Sandia Corporation
+Jess Version 7.1p2 11/5/2008
+
+Is the tyre pressure between 28 and 32 lbs? (y/n) y
+Does the oil dipstick indicate full? (y/n) n
+Does the engine turn over when the ignition key is turned? (y/n) end
+

@@ -1,0 +1,23 @@
+
+Jess, the Rule Engine for the Java Platform
+Copyright (C) 2008 Sandia Corporation
+Jess Version 7.1p2 11/5/2008
+
+
+-- Bars with square cross sections --
+
+ID: Fe-1 Length: 10 Width: 10 Height: 10
+ID: Fe-5 Length: 30 Width: 30 Height: 10
+ID: Pt-10 Length: 20 Width: 20 Height: 20
+
+-- Bars with quare sides --
+
+ID: Fe-1 Length: 10 Width: 10 Height: 10
+ID: Cu-3 Length: 20 Width: 10 Height: 20
+ID: Pt-4 Length: 10 Width: 20 Height: 10
+ID: Pt-10 Length: 20 Width: 20 Height: 20
+
+-- Bars that are cubes --
+
+ID: Fe-1 Length: 10 Width: 10 Height: 10
+ID: Pt-10 Length: 20 Width: 20 Height: 20

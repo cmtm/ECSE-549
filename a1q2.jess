@@ -1,3 +1,11 @@
+; Assignment 1 Question 2
+; Chris Morin 260344722
+
+; To handle this problem I applied one rule at a time to the facts
+; This way, I didn't have to worry about working with lists or iterators
+; I could have applied all the rules at the same time, but then
+; They wouldn't be ordered by class and it would look ugly.
+
 (deftemplate bar (slot ID) (slot Length) (slot Width) (slot Height))
 
 (deffacts bars-in-stock 

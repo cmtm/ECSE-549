@@ -1,0 +1,82 @@
+; Assignemnt 1 Question 3
+; Chris Morin 260344722
+
+; Questions are triggered by the existance of question facts
+; After all answers are received, the program prints out possible
+; car problems
+
+(deftemplate question
+	(slot text)
+	(slot problem))
+
+(deffacts diagnostic-questions
+	(question (text "Does the fuel gauge not read empty?") (problem gas))
+	(question (text "Do the car lights work?") (problem battery))
+	(question (text "Does the engine turn over when the ignition key is turned?") (problem starter))
+	(question (text "Does the oil dipstick indicate full?") (problem oil))
+	(question (text "Is the tyre pressure between 28 and 32 lbs?") (problem tyres)))
+	
+(defrule ask
+	"Ask a question, and return the answer"
+	(question (text ?t) (problem ?p))
+=>
+	(printout t ?t " ")
+	(printout t "(y/n) ")
+	(bind ?answer (read))
+	; right now anything other than n or end is considered y
+	; I might want to handle y explicitly and error on anything else
+	(if (eq ?answer end) then (clear))
+	(if (eq ?answer n) then (assert (problem ?p))))
+
+(reset)
+(run)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; diagnostic occurs after questions
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule gas
+	(problem gas)
+=>
+	(printout t "There isn't any gas in the car." crlf))
+
+
+; Assignment specs are a little strange here
+; there is a redundant implication
+; ( (good battery) & (good starter) ) -> (good electrical)
+; ( (good battery) & (engine turns) ) -> (good starter)
+; as can be seen here, a good starter alone implies working electrical system 
+; in fact, I'm not really sure why the elctrical system is mentioned at all
+; the goal is to diagnose, so we want to know the CAUSES of the electrical
+; system not working.
+
+(defrule battery
+	(problem battery)
+=>
+	(printout t "Can't diagnose starter motor without working battery." crlf)
+	(printout t "The battery isn't working." crlf))
+
+; The assignemnt specs are unclear here. Should the starter only
+; be claimed to be the problem if the battery IS working and the
+; engine won't start?
+(defrule starter
+	(not (problem battery))
+	(problem starter)
+=>
+	(printout t "The starter motor isn't working." crlf))
+
+
+(defrule oil
+	(problem oil)
+=>
+	(printout t "The oil is low." crlf))
+
+
+(defrule tyres
+	(problem tyres)
+=>
+	(printout t "The tyres aren't inflated properly." crlf))
+
+(printout t crlf crlf)
+(run)
+

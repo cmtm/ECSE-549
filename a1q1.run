@@ -1,0 +1,27 @@
+
+Jess, the Rule Engine for the Java Platform
+Copyright (C) 2008 Sandia Corporation
+Jess Version 7.1p2 11/5/2008
+
+
+No additional rules
+Robot started moving.
+
+Red light and going straight.
+
+other car parallel and going straight.
+Robot started moving.
+
+other parallel and going left. light green.
+
+other parallel and going left. light blinking-green.
+Robot started moving.
+
+other parallel and going straight. light blinking-red.
+
+-- Walking test --
+
+don't walk sign
+
+walk sign
+Robot started walking.
