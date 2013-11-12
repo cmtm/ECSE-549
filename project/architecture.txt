@@ -1,0 +1,61 @@
+This document contains a brief description of the modules that make up the
+design advisor.
+
+Module 1: Specification Retreiver
+
+Ask the user a series of questions to get the specifications of the device.
+These questions will get more and more specific to a particular device as the
+design advisor learns more through the questions. Once the design advisor
+understands the devices general functionality, it then asks the user to fill
+in a form with all the specifications he knows. The form will have fields like
+"input voltage amplitude range", "input voltage to output voltage amplitude
+ration", "maximum size". These fields will also have the possibility of being
+hard constraints or varying levels of soft constraints.
+
+Here is a mock question session:
+
+Q: What is the input energy type?
+A: Electrical
+
+Q: What is the output energy type?
+A: Electrical
+
+Q: Is the input AC or DC?
+A: AC
+
+Q: Is the output AC or DC?
+A: DC
+
+The design advisor has determined you need a rectifier. Please fill out all
+the known parameters of the device to best come up with a design.
+
+Input voltage amplitude:
+
+Output volate amplitude:
+
+Input frequency:
+
+...
+
+
+After all the specifications are known, the specification retriever passes
+these on to the next module for it to come up with a design that best
+represents what the user wants.
+
+Module 2: Case based reasoning
+
+This contains a database of generic devices and the parameterized equations representing
+their behavior. The database would be divided into classes of similar
+components. The devices could first be divided into ones that move and ones
+that don't. The devices that move could then be divided into motors or
+generators. Motors could be devided into AC and DC and so on and so forth. The
+specification retriever asks questions to traverse this tree until it finds an
+actual device (as opposed to a class of devices). 
+
+Module 3: design solver
+
+Once all the specifications are retrieved, this module comes up with the
+actual design. It's possible for it to need to ask more questions if the specs
+are too open for a good solution or too closed for any solution. It uses both
+hard constraints and soft ones to match the design. This might consist of
+equation solvers, more case based reasoning, rule engines,...
