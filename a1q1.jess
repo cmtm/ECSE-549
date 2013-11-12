@@ -1,0 +1,135 @@
+; replace "status" by "transit-mode" for more readability
+
+
+; when driving, robot can be "moving" or "stopped"
+; there can be a car that has priority over it. in which case he needs
+; to wait until said car has passed and the robot can safely "go"
+; (priority no) means he has to wait. In it's abscence he can go.
+; other cars or pedestriand can either be going perpendicular or parallel (oncomming)
+; (other perpendicular) (other parallel). The abscence of one of these
+; indicates no other car is waiting.
+; This fact is ignored on a blinking green light however. 
+; the robot has a direction: (direction straight) (direction right) (direction left)
+
+; NOTE: doesn't yield to pedestrians when turning right!!
+; can use walk-sign and new (other right-parallel) or somthing
+
+(deftemplate robot (slot status) (slot motion-state))
+
+(defrule left-priority
+	(logical (other parallel))
+	(logical (light ~blinking-green))
+	(logical (direction left))
+=>
+	(assert (priority no)))
+
+(defrule flash-red-priority
+	(logical (other ?))
+	(logical (light blinking-red))
+=>
+	(assert (priority no)))
+
+	
+(defrule stop
+	?r <- (robot (status driving) (motion-state moving))
+	(or (light red) (priority no))
+=>
+	(modify ?r (motion-state stopped))
+	(printout t "Robot stopped." crlf))
+
+(defrule move
+	?r <- (robot (status driving) (motion-state stopped))
+	(not (light red))
+	(not (priority no))
+=>
+	(modify ?r (motion-state moving))
+	(printout t "Robot started moving." crlf))
+
+(defrule careful
+	?r <-(robot (status driving) (motion-state moving))
+	(light blinking-yellow)
+=>
+	(assert (exercise caution))
+	(printout t "Exercising caution cause of blinking yellow light." crlf))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Walking transit-mode
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defrule walk
+	?r <- (robot (status walking) (motion-state stopped))
+	(walk-sign walk)
+=>
+	(modify ?r (motion-state moving))
+	(printout t "Robot started walking." crlf))
+
+(defrule stop-walk
+	?r <- (robot (status walking) (motion-state walking))
+	(walk-sign dont-walk)
+=>
+	(modify ?r (motion-state stopped))
+	(printout t "Robot stopped walking." crlf))
+	
+
+
+; default behavior starting from stopped
+(printout t crlf "No additional rules" crlf)
+(reset)
+(assert (robot (status driving) (motion-state stopped)))
+(run)
+
+; see what happens when a red light appears
+(printout t crlf "Red light and going straight." crlf)
+(reset)
+(assert (robot (status driving) (motion-state stopped)))
+(assert (light red))
+(assert (direction straight))
+(run)
+
+(printout t crlf "other car parallel and going straight." crlf)
+(reset)
+(assert (robot (status driving) (motion-state stopped)))
+(assert (other parallel))
+(assert (direction straight))
+(assert (light none))
+(run)
+
+(printout t crlf "other parallel and going left. light green." crlf)
+(reset)
+(assert (robot (status driving) (motion-state stopped)))
+(assert (other parallel))
+(assert (direction left))
+(assert (light green))
+(run)
+
+(printout t crlf "other parallel and going left. light blinking-green." crlf)
+(reset)
+(assert (robot (status driving) (motion-state stopped)))
+(assert (other parallel))
+(assert (direction left))
+(assert (light blinking-green))
+(run)
+
+(printout t crlf "other parallel and going straight. light blinking-red." crlf)
+(reset)
+(assert (robot (status driving) (motion-state stopped)))
+(assert (other paralle))
+(assert (direction straight))
+(assert (light blinking-red))
+(run)
+
+;; Walking test
+
+(printout t crlf "-- Walking test --" crlf)
+
+(printout t crlf "don't walk sign" crlf)
+(reset)
+(assert (robot (status walking) (motion-state stopped)))
+(assert (walk-sign dont-walk))
+(run)
+
+(printout t crlf "walk sign" crlf)
+(reset)
+(assert (robot (status walking) (motion-state stopped)))
+(assert (walk-sign walk))
+(run)
