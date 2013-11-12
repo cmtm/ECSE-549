@@ -1,0 +1,42 @@
+= Available resources document
+
+== Time constraints
+
+A single working device must be delivered in 2 weeks time.
+
+== Human resources
+
+=== Administrative
+
+One project manager overseeing the project.
+
+=== Design
+
+One engineer working full time on designing and producing the piece.
+Engineer has designed and produced several other similar devices in the past.
+Other team members can be used for consultation by the engineer.
+
+=== Implementation
+
+Mechanics in a work shop can aid in producing the device.
+Design engineer will be doing most implementation work however.
+
+=== Miscellaneous
+
+== Non-human resources
+
+=== Design tools
+
+Access to actuator design examples and material covering their basic theory.
+
+=== Prototyping resources
+
+Machine shop fully stocked with tools and parts.
+
+=== Testing infrastructure
+
+Machine shop will be used to create the testbench.
+
+=== Implementation resources
+
+Machine workshop.

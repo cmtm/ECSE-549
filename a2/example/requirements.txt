@@ -1,0 +1,43 @@
+= User requirements document
+
+== High level description
+
+=== What is the intention of the design 
+
+Not known.
+
+=== Description of the design
+
+Design a linear actuator.
+
+== Core requirement
+
+=== Features
+
+The actuator stroke length is 1cm.
+The actuator will run on a 12volt supply.
+The actuator must fit in a space of 2.5cm x 2.5cm x 5cm.
+
+=== Costs
+
+Not known.
+
+=== Tolerances
+
+Not known.
+
+=== Miscellaneous
+
+None.
+
+== Missing requirement
+
+What force must the actuator produce.
+How fast must that actuator move (acceleration and speed).
+Is the space constraint when in extended mode or when compressed?
+
+== Tests
+
+Place the actuator in a 2.5 x 2.5 x 5 cm box with no top.
+Hook the actuator up to a 12volt supply and have it actuate. Measure the
+displacement of the actuating piece and ensure it's 1 cm.

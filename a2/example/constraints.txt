@@ -1,0 +1,10 @@
+= System constraints document
+
+== Working environment
+
+This maximum size of the actuator can be interpreted as an environmental
+constraints but technicaly we don't know if this is the case.
+
+== Imposed constraints
+
+Possibly the size of the actuator.

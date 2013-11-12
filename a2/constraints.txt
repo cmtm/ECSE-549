@@ -1,0 +1,9 @@
+= System constraints document
+
+== Working environment
+
+Describe the environment in which the implementation needs to operate
+
+== Imposed constraints
+
+Describe how the environment might affect the design.

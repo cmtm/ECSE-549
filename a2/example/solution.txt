@@ -1,0 +1,35 @@
+= Knowledge concepts an solution processes document
+
+== Knowledge 
+
+This section specifies what kind of knowledge we need to represent for each
+category. This document isn't supposed to contain knowledge statements, but is
+just supposed to contain what kind of knowledge from each category will be
+used in the implementation.
+
+=== Knowledge from requirements
+
+Specifications of the actuator. This includes physical dimensions and working
+conditions.
+
+=== Knowledge from environment
+
+None (or size constraints).
+
+=== Knowledge from external source
+
+Theory of how actuators work. Different actuator examples and their important
+parameters.
+
+== Representation
+
+Example devices will be examined and one closest the the desired
+specifications will be selected as a reference.
+
+A physical representation of the device will be created. The physical shape
+and motion will be modeled using know physical equations.
+
+== Solution processes
+
+Starting from the example device, the parameters will be changed until the
+specifications meet the desired ones.

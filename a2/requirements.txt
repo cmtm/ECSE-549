@@ -1,0 +1,70 @@
+= User requirements document
+
+== High level description
+
+=== What is the intention of the design (optional)
+
+This section should describe what the ultimate goal of the design is. This
+section should avoid describing the specific requirements and instead focus on
+why the design was requested in the first place. This section is optional as
+the details aren't always known.
+
+=== Description of the design
+
+Often times, when faced with a problem, a obvious solution exists and is
+chosen right from the start. The design problem becomes constrained to
+choosing the details of the aforementioned obvious solution. 
+
+Let's look at an example to clarify things.
+If the problem is to repeatedly move an object in a straight line from point A
+to point B, a linear actuator might be assumed as an obvious solution and the
+requirements would specify the constraints on the linear actuator. Other
+possible solutions like a crane or a rocket engine aren't even considered.
+
+
+== Core requirement
+
+=== Features
+
+This section describes in a detailed fashion everything the design is supposed
+to do. 
+
+=== Costs
+Describes the allowed costs associated with implementation or productions of
+the design. Access to certain resources which might skew the costs should be
+included. 
+
+This section doesn't include cost or resource constraints on the
+design process, just on the implementation of the final design.
+
+=== Tolerances
+
+How close to the specifications does the design need to be. This usually
+relates to the features section about.
+
+=== Miscellaneous
+
+Some requirements don't readily fit into other categories.
+For example, a device might need to last at least 3 years in certain operating
+conditions.
+
+== Missing requirement
+
+Often times, certain requirements are left unspecified. Explicitly stating
+those here could be beneficial, as it would allow us to determine what kind of
+freedoms we have, and more importantly, what requirements do we need the
+client to expand upon.
+
+== Tests
+
+In the spirit of test driven development, I thought it would be a good idea
+to detail tests to be completed on the implementation to validate the design.
+
+The tests should cover the largest amount of specifications practically
+possible so that a completion of all the tests is as best an indicator of the
+success of the design as possible.
+
+Coming up with the tests before the design is even started is a nice way to
+ensure that the specification is coherent and properly understood. The tests
+effectively become the specification.
+

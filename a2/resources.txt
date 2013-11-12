@@ -1,0 +1,53 @@
+= Available resources document
+
+== Time constraints
+
+Describe the possible timelines for the project.
+Do certain deadlines need to be met?
+This not only includes the timeline of the design, but also the prototyping,
+testing, scaling, finished result, etc.
+
+== Human resources
+
+Describes the various human resources available for the solution.
+
+=== Administrative
+
+=== Design
+
+=== Implementation
+
+=== Miscellaneous
+
+== Non-human resources
+
+All resources available to the project besides humans are included here.
+
+=== Design tools
+
+These can be software tools, like a software compiler or CAD software.
+They can also be physical things such as computers, video conferencing setups,
+even office stationary if one feels the need to specify it (e.g. blueprint
+paper).
+
+
+=== Prototyping resources
+
+This is anything available for creating the prototype of the product. Examples
+could be machine shops or 3D printers.
+
+=== Testing infrastructure
+
+What kind of testing setup is available. The nature of this infrastructure can
+vary greatly based on what is to be designed. For a software project, the
+testing infrastructure could be an automated build and test system. For a
+physical design such as a car, testing might involve a driving course or crash
+testing facilities.
+
+=== Implementation resources
+
+Once designed, the implementation itself needs resources. If it's a mass
+manufactured solution, entire factories with automated assembly lines could go
+in this section.
+
+Smaller scale designs might just need workshops.

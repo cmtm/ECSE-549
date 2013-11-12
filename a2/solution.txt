@@ -1,0 +1,34 @@
+= Knowledge concepts an solution processes document
+
+== Knowledge 
+
+This section specifies what kind of knowledge we need to represent for each
+category. This document isn't supposed to contain knowledge statements, but is
+just supposed to contain what kind of knowledge from each category will be
+used in the implementation.
+
+=== Knowledge from requirements
+
+This is related to the user requirement document.
+
+=== Knowledge from environment
+
+This is related to the system constraints document.
+
+=== Knowledge from external source
+
+Much knowledge used in designing a solution is external to the design itself.
+Thing like laws of physics, standards and heuristics fall into this category.
+It's a bit of a catch all if you will.
+
+== Representation
+
+How will all the knowledge be represented in a cohesive way.
+
+== Solution processes
+
+Once the knowledge is represented in a cohesive way, an algorithm is run over
+it in order to produce a design (or a solution to the problem). This algorithm
+is described in this section. Common algorithms can consist of equation solvers or
+rules engines.
+
