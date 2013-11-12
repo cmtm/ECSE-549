@@ -1,5 +1,6 @@
 
 Following is the sequence of events that occur when using the advisor
+Anything enclosed in stars ('*') is an optional path.
 
 A = advisor
 U = user
@@ -47,7 +48,7 @@ A: Upon sucess of all sanity checks, start to solve the system.
 * 
 *  U: Add extra constraints if desired.
 ***
-
+ as
 A: Present final design to user. In the case of multiple designs, present them
    all.
 
