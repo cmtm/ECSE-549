@@ -1,7 +1,17 @@
 ; Assignment 3 Question 1
 ; Chris Morin 260344722
 
-(deftemplate in (slot value) (slot pin) (slot gateName))
+(deftemplate pin (slot value) (slot gateName))
 
-(deftemplate out (slot value) (slot pin) (slot gateName))
+(deftemplate in extends pin) 
+(deftemplate out extends pin) 
 
+(deftemplate connect (slot 
+
+; trial!
+(deftemplate connect (slot n1) (slot n2))
+
+
+(reset)
+(assert (connect(n1 in(2, A1)) (n2 out(4, A2))))
+(run)
