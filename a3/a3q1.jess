@@ -1,0 +1,72 @@
+; Assignment 3 Question 1
+; Chris Morin 260344722
+
+; describing pins as facts is weird.
+;(deftemplate pin (slot value) (slot gateName))
+;(deftemplate in extends pin) 
+;(deftemplate out extends pin)
+;
+; since a devices input AND output can BOTH "receive" AND "send"
+; values, the idea of in and out is meaningless. F1 has inputs that
+; send and outputs that receive.
+; instead, I'll just look at everything as a pin (aka node) regardless
+; of it's orientation. I'll use template inheritance to conform to
+; assignment specs though
+
+; pins look like this: {in,out}n{a,o,x}m  where n,m are integers
+; a pin labelled in2a1 would read as input 2 of the gate A1
+
+;(deftemplate interface (slot pin) (slot type) (slot num))
+;(deftemplate connect (slot start) (slot finish))
+;
+;
+;(deffacts try 
+;	(connect 
+;		(start (assert (interface (pin out1) (type A) (num 1))))
+;		(finish (assert (interface (pin in1) (type O) (num 1))))))
+;
+; pin: A 1 in 1
+
+;(deftemplate connect (declare (ordered TRUE)))
+
+(deftemplate connect (slot startPin) (multislot startGate) (slot endPin) (multislot endGate))
+
+
+
+; (deffacts connections
+; 	(connect in1f1 in1x1)
+; 	(connect in1f1 in1a1)
+; 	(connect in2f1 in2x1)
+; 	(connect in2f1 in2a1)
+; 	(connect in3f1 in1a2)
+; 	
+; 	(connect out1x1 in1x2)
+; 	(connect out1x1 in2a2)
+; 
+; 	(connect out1a1 in2o1)
+; 	
+; 	(connect out1a2 in1o1)
+; 
+; 	(connect out1x2 out1f1)
+; 
+; 	(connect out1o1 out2f1))
+
+;(deftemplate V (slot pin) (slot val))
+;(deftemplate O extends V)
+;(deftemplate I extends V)
+
+
+;(defrule propagate
+;	"propagate a value through wire (not through gate)"
+;	(V (pin ?start) (val ?v))
+;	(connect ?start ?finish)
+;=>
+;	(assert V (pin ?finish) (val ?v)))
+
+;(defrule gate
+;
+;	(V (in1a1
+	
+
+(reset)
+(run)

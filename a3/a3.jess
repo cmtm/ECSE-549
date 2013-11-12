@@ -1,0 +1,191 @@
+; Assignment 3 Question 1
+; Chris Morin 260344722
+
+; describing pins as facts is weird.
+
+; since a devices input AND output can BOTH "receive" AND "send"
+; values, the idea of in and out is meaningless. F1 has inputs that
+; send and outputs that receive.
+; instead, I'll just look at everything as a pin (aka node) regardless
+; of it's orientation. I'll use template inheritance to conform to
+; assignment specs though
+
+
+(deftemplate connect (slot startPin) (multislot startGate) (slot endPin) (multislot endGate))
+
+
+(deffacts connections
+	(connect (startPin in1) (startGate f 1) (endPin in1) (endGate x 1))
+	(connect (startPin in1) (startGate f 1) (endPin in1) (endGate a 1))
+	(connect (startPin in2) (startGate f 1) (endPin in2) (endGate x 1))
+	(connect (startPin in2) (startGate f 1) (endPin in2) (endGate a 1))
+	(connect (startPin in3) (startGate f 1) (endPin in1) (endGate a 2))
+	(connect (startPin in3) (startGate f 1) (endPin in2) (endGate x 2))
+	
+	(connect (startPin out1) (startGate x 1) (endPin in1) (endGate x 2))
+	(connect (startPin out1) (startGate x 1) (endPin in2) (endGate a 2))
+
+	(connect (startPin out1) (startGate a 1) (endPin in2) (endGate o 1))
+	
+	(connect (startPin out1) (startGate a 2) (endPin in1) (endGate o 1))
+
+	(connect (startPin out1) (startGate x 2) (endPin out1) (endGate f 1))
+
+	(connect (startPin out1) (startGate o 1) (endPin out2) (endGate f 1)))
+
+
+(deftemplate Bit (slot pin) (multislot gate) (slot state))
+
+	
+(defrule propagate
+	"propagate a value through wire (not through gate)"
+	(Bit (pin ?p) (gate $?g) (state ?s))
+	(connect (startPin ?p) (startGate $?g) (endPin ?ep) (endGate $?eg))
+=>
+	(assert (Bit (pin ?ep) (gate ?eg) (state ?s))) )
+
+(defrule gateLogic
+
+	(Bit (pin in1) (gate ?type&~f ?index) (state ?s1) )
+	(Bit (pin in2) (gate ?type ?index) (state ?s2) )
+=>
+	(bind ?result
+		(if (= ?type a) then 
+			 (and ?s1 ?s2)
+		elif (= ?type o) then
+			(or ?s1 ?s2)
+		elif (= ?type x) then
+			(and (or ?s1 ?s2) (not (and ?s1 ?s2)))))
+	
+
+	(assert (Bit (pin out1) (gate ?type ?index) (state ?result))))
+		
+	
+(watch facts)
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state TRUE)))
+(assert (Bit (pin in2) (gate f 1) (state TRUE)))
+(assert (Bit (pin in3) (gate f 1) (state TRUE)))
+(run)
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state FALSE)))
+(assert (Bit (pin in2) (gate f 1) (state FALSE)))
+(assert (Bit (pin in3) (gate f 1) (state FALSE)))
+(run)
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state TRUE)))
+(assert (Bit (pin in2) (gate f 1) (state FALSE)))
+(assert (Bit (pin in3) (gate f 1) (state FALSE)))
+(run)
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state TRUE)))
+(assert (Bit (pin in2) (gate f 1) (state FALSE)))
+(assert (Bit (pin in3) (gate f 1) (state TRUE)))
+(run)
+
+
+; Step 3
+; I'll assume the fault model is "stuck-at" where the OUTPUT 
+; of a single gate in the whole circuit might be stuck high or low
+
+
+(deftemplate observed (slot pin) (multislot gate) (slot state))
+(deftemplate faultPath (multislot gate))
+
+(defrule backwardsPropagation
+	"back propagate an observed value through wire (not through gate)"
+	(observed (pin ?p) (gate $?g) (state ?s))
+	(connect (startPin ?sp) (startGate $?sg) (endPin ?p) (endGate $?g))
+=>
+	(assert (observed (pin ?sp) (gate ?sg) (state ?s))) )
+
+(defrule innerFault
+	(faultPath (gate ?type&~f ?index))
+	(observed (gate ?type ?index) (state ?actual))
+	(Bit (pin ?inx&~out1) (gate ?type ?index) (state ?s1) )
+	(Bit (pin ?iny&~out1&~?inx) (gate ?type ?index) (state ?s2) )
+	(connect (startPin out1) (startGate $?sg) (endPin ?iny) (endGate ?type ?index))
+	(test (= ?actual (if (= ?type a) then 
+			 (and ?s1 (not ?s2))
+		elif (= ?type o) then
+			(or ?s1 (not ?s2))
+		elif (= ?type x) then
+			(and (or ?s1 (not ?s2)) (not (and ?s1 (not ?s2)))))))
+=>
+	(printout t crlf "gate " (implode$ ?sg) " might be malfunctioning" crlf))
+	
+	
+(defrule problem
+	(observed (pin ?p) (gate $?g) (state ?s))
+	(Bit (pin ?p) (gate $?g) (state ~?s))
+=>
+	(printout t crlf "gate " (implode$ ?g) " might be malfunctioning" crlf)
+	(assert (faultPath (gate ?g))))
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state TRUE)))
+(assert (Bit (pin in2) (gate f 1) (state TRUE)))
+(assert (Bit (pin in3) (gate f 1) (state TRUE)))
+(assert (observed (pin out1) (gate f 1) (state FALSE)))
+(assert (observed (pin out2) (gate f 1) (state TRUE)))
+(run)
+; notice how he only suspected X2 and not X1 as X1 couldn't possibly be to blame
+	
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state TRUE)))
+(assert (Bit (pin in2) (gate f 1) (state TRUE)))
+(assert (Bit (pin in3) (gate f 1) (state FALSE)))
+(assert (observed (pin out1) (gate f 1) (state FALSE)))
+(assert (observed (pin out2) (gate f 1) (state TRUE)))
+(run)
+; correctly suspects both X1 and X2
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state TRUE)))
+(assert (Bit (pin in2) (gate f 1) (state TRUE)))
+(assert (Bit (pin in3) (gate f 1) (state FALSE)))
+(assert (observed (pin out1) (gate f 1) (state FALSE)))
+(assert (observed (pin out2) (gate f 1) (state FALSE)))
+(run)
+; correctly suspects both O1 and A1
+; notice A2 isn't suspected cause it can't possibly be the cause
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state TRUE)))
+(assert (Bit (pin in2) (gate f 1) (state FALSE)))
+(assert (Bit (pin in3) (gate f 1) (state TRUE)))
+(assert (observed (pin out1) (gate f 1) (state FALSE)))
+(assert (observed (pin out2) (gate f 1) (state FALSE)))
+(run)
+; now it's A2 that's suspected
+
+
+(reset)
+(assert (Bit (pin in1) (gate f 1) (state FALSE)))
+(assert (Bit (pin in2) (gate f 1) (state FALSE)))
+(assert (Bit (pin in3) (gate f 1) (state FALSE)))
+(assert (observed (pin out1) (gate f 1) (state TRUE)))
+(assert (observed (pin out2) (gate f 1) (state TRUE)))
+(run)
+; In this case, every single gate is suspected because changing
+; any one will explain the output
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
