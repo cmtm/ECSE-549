@@ -1,0 +1,68 @@
+For this implementation, we decided to only have the design advisor solve for
+devices in steady state operation. This means that it can't optimize for a
+device over a range of operating conditions.  While restrictive, this greatly
+simplifies both the job of the advisor developers (us) and the advisor end
+user.
+
+To clarify what this entails, lets look at an example.  Any given motor has a
+torque curve which specifies how it's torque varies with respect to it's
+rotational speed. A very good advisor would let the user specify what they
+want this torque curve to look like (or just specify several points on it) and
+the advisor would then come up with a motor that most closely matches the
+curve. Our advisor only solves for steady state operation, so the rotational
+speed and torque wouldn't vary. This means the user would only be able to
+specify a single point in the torque vs rotational speed plane and the
+designer would then find the design closest to that point.
+
+Only allowing the user to specify a single value for each parameter would make
+the advisor virtually useless. The user often doesn't know exact values of all
+the parameters, he often just knows something about what he wants it to be.
+For example, the user often doesn't know the precise cost of their device,
+they might just want to keep costs as low as possible, or keep it below a
+certain threshold.  In the example of the torque and rotational speed, they
+might just want it to be within a certain percentage of a specified value.
+
+The advisor takes all these into consideration by having the user attribute a
+goodness function to each parameter. This goodness function can take on values
+from 0 to 1 and has a domain dependant on the parameter. The advisor selects
+the design with parameters that have the highest product (as in
+multiplication) of goodness. Because the various parameters will be related to
+each other by equations, the design selected won't just have parameters set at
+the maximum of their individual goodness functions.
+
+Parameters to which the user can attribute a goodness function:
+
+	Interface (input or output) specifications:
+		Electrical Interface:
+			AC:
+				frequency
+				phases
+				voltage amplitute (Vrms)
+				current ampliture (Irms)
+				thevenin Resistance (Input/Output resistance)
+				power (input or output)
+			DC:
+				voltage amplitute (Vrms)
+				current ampliture (Irms)
+				thevenin Resistance (Input/Output resistance)
+				power (input or output)
+		
+		Mechanical Interface:
+			Rotational:
+				angular velocity
+				torque
+				power (input or output)
+
+			Linear:
+				actuation length
+				force at ends of range of motion
+				force at middle of range of motion
+				frequency
+	
+	System specifications:
+		dimensions (x,y,z)
+		mass
+		efficiency (output power / input power)
+		heat output
+		cost
+
