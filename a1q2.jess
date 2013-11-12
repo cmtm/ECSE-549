@@ -1,0 +1,60 @@
+(deftemplate bar (slot ID) (slot Length) (slot Width) (slot Height))
+
+(deffacts bars-in-stock 
+	; facts are in reverse order so that they're printed in correct order
+	(bar (ID Pt-10) (Length 20) (Width 20) (Height 20))
+	(bar (ID Pt-9) (Length 30) (Width 20) (Height 10))
+	(bar (ID Cu-8) (Length 10) (Width 20) (Height 30))
+	(bar (ID Fe-7) (Length 10) (Width 30) (Height 20))
+	(bar (ID Fe-6) (Length 30) (Width 20) (Height 10))
+	(bar (ID Fe-5) (Length 30) (Width 30) (Height 10))
+	(bar (ID Pt-4) (Length 10) (Width 20) (Height 10))
+	(bar (ID Cu-3) (Length 20) (Width 10) (Height 20))
+	(bar (ID Cu-2) (Length 20) (Width 10) (Height 10))
+	(bar (ID Fe-1) (Length 10) (Width 10) (Height 10))
+)
+
+
+(reset)
+(defrule square-cross-section
+	(bar (ID ?i) (Length ?x) (Width ?x) (Height ?h))
+=>
+	(printout t "ID: " ?i " Length: " ?x " Width: " ?x " Height: " ?h crlf))
+
+(printout t crlf "-- Bars with square cross sections --" crlf crlf)
+(run)
+(undefrule square-cross-section)
+
+
+(reset)
+(defrule square-side
+	(bar (ID ?i) (Length ?x) (Width ?w) (Height ?x))
+=>
+	(printout t "ID: " ?i " Length: " ?x " Width: " ?w " Height: " ?x crlf))
+
+(printout t crlf "-- Bars with quare sides --" crlf crlf)
+(run)
+(undefrule square-side)
+
+
+(reset)
+(defrule cube
+	(bar (ID ?i) (Length ?x) (Width ?x) (Height ?x))
+=>
+	(printout t "ID: " ?i " Length: " ?x " Width: " ?x " Height: " ?x crlf))
+
+(printout t crlf "-- Bars that are cubes --" crlf crlf)
+(run)
+(undefrule cube)
+
+
+
+
+
+
+
+
+
+
+
+
