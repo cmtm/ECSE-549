@@ -3,10 +3,10 @@ Knowledge Acquisition
 
 	Needed Knowledge
 
-		The two types of knowledge we need are the circuit theory knowledge and and the network
+		The two types of knowledge we need are the circuit theory knowledge and the network
 		layout information. The circuit theory is general knowledge about how resistor networks can
 		be simplified or transformed.  The network layout information is what represents the
-		topology and resistances of a specifc resistor network.
+		topology and resistances of a specific resistor network.
 
 	Modeling the system
 	 
@@ -15,19 +15,19 @@ Knowledge Acquisition
 		The program will take in a resistor network defined by a list of resistors. A resistor is
 		itself defined by a name, a pair of nodes and a resistance. The program will simplify this
 		network down to a single resistor (if possible). It is assumed the network can be simplified
-		by a combination of series/parallel reductions and detla-Y transforms.
+		by a combination of series/parallel reductions and delta-Y transforms.
 
-		= Conceptualisation 
+		= Conceptualization 
 		
 		The resistors will be described by facts. Each of the resistor facts specified by the user
 		will have a unique name. A resistor graph is inherently undirected, while a fact specifying
-		two nodes is inherently "directed". This occurs because the value matching mechanism works
+		two nodes is inherently "directed". This is so because the value matching mechanism works
 		with distinct slots, so one would be that tail and the other the head.
 
-		To handle this, each resistor will be accociated with 2 facts. Each fact is the same as the
+		To handle this, each resistor will be associated with 2 facts. Each fact is the same as the
 		other but with the nodes reversed. The makes a directed graph but with every edge having a
 		complement edge going in the opposite direction. When a resistor is removed (from a
-		simplification operation), both facts associated from it are retracted.
+		simplification operation), both facts associated with it are retracted.
 
 		Thanks to this our rules will be much simpler as they'll leverage the symmetry of the graph
 		such that they'll be able to treat it much like an undirected graph. All network
@@ -95,3 +95,8 @@ Knowledge Acquisition
 		= Implementation
 
 		See file a4.jess for the implementation
+
+
+		= Testing
+
+		See file a4.jess for testing

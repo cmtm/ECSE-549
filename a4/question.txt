@@ -1,0 +1,75 @@
+a. Why do we need to model the circuit as a directed graph? What other alternatives are possible?
+
+	This question was largely answered in the writeup but I'll summarize here.
+	
+	A resistor graph is inherently undirected, while a fact specifying two nodes is inherently
+	"directed". This is so because the value matching mechanism works with distinct slots, so one
+	would be that tail and the other the head.
+
+	To handle this, each resistor will be associated with 2 facts. Each fact is the same as the
+	other but with the nodes reversed. The makes a directed graph but with every edge having a
+	complement edge going in the opposite direction. When a resistor is removed (from a
+	simplification operation), both facts associated with it are retracted.
+
+	Another way to handle this would be to have the rules themselves do the extra work by having
+	them check for an edge going in one direction OR the other. This would eliminate the need for
+	the functions, but would make the LHS of the rules (the matching patterns) more complicated.
+
+	Yet another would be to have each rule dedicate 4 slots to rules where 2 slots contain the same
+	nodes as the other two but reversed. This would still complicate the rules, but not as much as
+	in the previous alternative.
+
+	Abstracting away from jess, what we would really want to do is represent the node pair as a set
+	and be able to match against sets that contain a certain node. To my knowledge, this isn't
+	possible with jess since matching can only be done on facts and facts don't have the necessary
+	set operations.
+
+b. In what case would potential problems arise if we didn't use priorities and we didn't worry about
+them.
+
+	Once again, this was answered in the writeup. I'll elaborate here.
+
+
+	The delta-Y transform should only be applied when the three networks form a true delta
+	meaning all three nodes are joined to a node OUTSIDE of the nodes forming the delta. If one
+	of them isn't, then it the "delta" can be reduced to a single resistor using only
+	series and parallel reductions so the delta-Y operation would be a silly choice to make. If we
+	were able to impose priorities, we could simply place the parallel and series reductions at a
+	higher priority than the delta-Y. This would allow us to not check for "trueness" in delta
+	networks because they would all be true as the non-true ones would be reduced by the higher
+	priority reductions.
+
+	We had to choose between only applying the delta-Y or the Y-delta transforms because of the
+	arbitrarity in the order of their application. If we used both, we could get stuck in an infinite
+	loop of delta-Y and Y-delta on the same three resistors. Giving the series-parallel reductions a
+	priority over the delta-Y and Y-delta transforms would allow us to use both without worrying
+	about infinite loops. Since we can't though, we need to only use one.
+
+c. How can the program be modified so that the system reduces to a circuit between two given nodes?
+
+	Given the terminal nodes Alpha and Omega as facts specified by the user, There are two easy ways
+	of doing this. One involves false resistors and the other involves restricted rules.
+
+	False resistors:
+		
+		Simply add a two resistors each with a value of 0 to the circuit. These resistors are each
+		connected to one of the terminal nodes and a new node that itself is connected to nothing
+		else. These two resistances would prevent any reductions from eliminating those nodes so as
+		none of the three rules can match it. This will lead to the final reduced network that
+		contains at least the Alpha and Omega node.
+	
+	Restricted rules:
+		
+		The only rule that removes nodes is the series reduction rule. We can add a condition that
+		the node between the two resistors in series (the node that will be removed), can't be the
+		Alpha or the Omega node (terminal nodes).
+
+d. Can the system grow to encompass different components? What modifications can should be made?
+
+	Yes it can. The series and parallel rules can be matched to only resistor components. If the
+	other components have their own transformation rules (such as capacitors a inductors in a steady
+	state AC network), rules can be added which match to them. Alternatively, the current rules can
+	be set to match to all the components that follow their rules. Coming back to the AC example,
+	inductors follow the same series-parallel reductions as resistances and these can be mixed and
+	matched if we use complex valued impedance to describe the values of the components.
+
