@@ -1,0 +1,97 @@
+
+Knowledge Acquisition
+
+	Needed Knowledge
+
+		The two types of knowledge we need are the circuit theory knowledge and and the network
+		layout information. The circuit theory is general knowledge about how resistor networks can
+		be simplified or transformed.  The network layout information is what represents the
+		topology and resistances of a specifc resistor network.
+
+	Modeling the system
+	 
+		= Identification 
+		
+		The program will take in a resistor network defined by a list of resistors. A resistor is
+		itself defined by a name, a pair of nodes and a resistance. The program will simplify this
+		network down to a single resistor (if possible). It is assumed the network can be simplified
+		by a combination of series/parallel reductions and detla-Y transforms.
+
+		= Conceptualisation 
+		
+		The resistors will be described by facts. Each of the resistor facts specified by the user
+		will have a unique name. A resistor graph is inherently undirected, while a fact specifying
+		two nodes is inherently "directed". This occurs because the value matching mechanism works
+		with distinct slots, so one would be that tail and the other the head.
+
+		To handle this, each resistor will be accociated with 2 facts. Each fact is the same as the
+		other but with the nodes reversed. The makes a directed graph but with every edge having a
+		complement edge going in the opposite direction. When a resistor is removed (from a
+		simplification operation), both facts associated from it are retracted.
+
+		Thanks to this our rules will be much simpler as they'll leverage the symmetry of the graph
+		such that they'll be able to treat it much like an undirected graph. All network
+		modifications will pass through functions to ensure both facts associated with a resistor
+		are added/removed as a pair. 
+
+		Three rules are necessary:
+			* parallel reduction
+			* series reduction
+			* delta-Y transform
+
+		The rules are applied greedily when they can be applied. For the series and parallel
+		reduction, this is obviously good as any application can only bring us closer to the
+		solution. The delta-Y transform rule is a little bit more complicated. If we only apply the
+		Y-delta transform, each transform will reduce the number of nodes, but a delta-Y transform
+		will reduce the number of cycles. Less nodes means we might be able to use a parallel
+		reduction while less cycles means we might be able to apply a series reduction. Either one
+		in combination with the reductions will solve the same circuits, but we can't pick both if
+		we're to have all the rules firing in arbitrary order as we could be stuck in an infinite
+		loop of delta-Y and Y-delta on the same three resistors. I chose delta-Y for a silly reason:
+		series resistor combination is computationally cheaper than parallel.
+
+		The delta-Y transform should only be applied when the three networks form a true delta
+		meaning all three nodes are joined to a node OUTSIDE of the nodes forming the delta. If one
+		of them isn't, then it the "delta" can be reduced to a single resistor using only
+		series and parallel reductions so the delta-Y operation would be a silly choice to make. To
+		accomplish this, we need to have the rule only match true deltas.
+
+		= Formalization
+
+		A template called structuring the resistor facts will look like so:
+			
+		(deftemplate resistor (slot name) (slot n1) (slot n2) (slot val) (slot twin))
+
+		The twin slot will contain a pointer to the complement fact.
+
+		There will be two functions, one for adding resistors and the other for removing. They will
+		be called inside the RHSs of the network transformation rules and by the user when building
+		the network. Their signatures:
+
+		(deffunction addResistor (?name ?n1 ?n2 ?val))
+		(deffunction removeResistor (?resistor))
+
+		The remove resistor takes a pointer to the resistor that is to be removed.
+		Both of theses are given only only of the edges and automatically handle the edge in the
+		opposite direction.
+		
+		There will be one rule for each of the transforms/reductions that we'll be using, so three
+		in total. The name of the node resulting from a series or parallel reduction will be 
+		assuming the nodes of the two resistors are nm1 and nm2
+		"(nm1 || nm2)" for parallel
+		"(nm1 + nm2)" for series
+
+		The delta-Y transform will name each resistor by concatenating the letter 'y' to the name of
+		the resistor clockwise to it in the delta form. Each time a delta-Y transform is done, a new
+		node must be added.  A counter is incremented each time a transform is done so that each
+		new node can have a unique name. The name of the node will be of the form "Xy" where 'X' is
+		it's position in the order of new nodes created.
+
+		The user will specify the network using a series of calls to "addResistor". The "run"
+		function is then called which start the rules engine and the transforms are applied
+		indiscriminately. The final result is 2 resistor facts (one for each direction) that both
+		have the same resistance and equal but oppositely ordered nodes.
+
+		= Implementation
+
+		See file a4.jess for the implementation

@@ -1,0 +1,111 @@
+; Assignment 4 part 1
+; Chris Morin 260344722
+
+; Since resistors are specified with 2 ordered nodes we need to consider how we'll handle this orderedness.
+; Rules are inherently ordered, so we'll use an adjacency list graph implementation to make it undirected.
+; This means we'll add 2 rules for each resistor the user specifies: one going in each direction.
+; Each resistor fact will point to it's twin fact. This will ease modifiying/removing them.
+; To make operations on the network easier, we'll define some helper functions.
+
+(deftemplate resistor (slot name) (slot n1) (slot n2) (slot val) (slot twin))
+
+(deffunction addResistor (?name ?n1 ?n2 ?val)
+	; I hope that the rule engine can't run during a function call.
+	; The halt - run is supposed to act as a guard to that but they make the program run out of memory.
+	; I'm guessing it's some kinf of recursive thing.
+	(halt)
+	(bind ?e1 (assert (resistor (name ?name) (n1 ?n1) (n2 ?n2) (val ?val) (twin nil))))
+	(bind ?e2 (assert (resistor (name ?name) (n1 ?n2) (n2 ?n1) (val ?val) (twin ?e1))))
+	(modify ?e1 (twin ?e2))
+	(run)
+	(return ?e1)
+)
+
+(deffunction removeResistor (?resistor)
+	(retract (fact-slot-value ?resistor twin))
+	(retract ?resistor)
+)
+
+; (defrule try
+; 	(resistor (name ?nm1) (n1 ?x) (n2 ?y) (val ?val1))
+; =>
+; 	(printout t "resistor found!" crlf)
+; )
+
+(defrule parallel
+	?r1 <- (resistor (name ?nm1) (n1 ?x) (n2 ?y) (val ?val1))
+	; The same rule can't fill 2 conditions so this is okay
+	?r2 <- (resistor (name ?nm2&~?nm1) (n1 ?x) (n2 ?y) (val ?val2))
+=>
+	(removeResistor ?r1)
+	(removeResistor ?r2)
+	(addResistor (str-cat "(" ?nm1 "||" ?nm2 ")") ?x ?y (/ (* ?val1 ?val2) (+ ?val1 ?val2)))
+)
+
+(defrule series
+	?r1 <- (resistor (name ?nm1) (n1 ?start) (n2 ?middle) (val ?val1))
+	?r2 <- (resistor (name ?nm2&~?nm1) (n1 ?middle) (n2 ?end&~?start) (val ?val2))
+	(not (resistor (name ?n&~?nm1&~?nm2) (n1 ?middle))) 
+=>
+	(removeResistor ?r1)
+	(removeResistor ?r2)
+	(addResistor (str-cat "(" ?nm1 "+" ?nm2 ")") ?start ?end (+ ?val1 ?val2))
+)
+
+; each time a delta-Y transform is done, a new node must be added.
+; This counter is incremented each time a transform is done so that
+; each new node can have a unique name. The name of the node will be
+; of the form "yX" where 'X' is it's position in the order of created y nodes
+(deffacts yCounter
+	(yCount 0)
+)
+
+(defrule delta-y
+	?r1 <- (resistor (name ?nm1) (n1 ?c1) (n2 ?c2) (val ?val1))
+	?r2 <- (resistor (name ?nm2) (n1 ?c2) (n2 ?c3) (val ?val2))
+	?r3 <- (resistor (name ?nm3) (n1 ?c3) (n2 ?c1) (val ?val3))
+	; These three conditions prevent the rule from firing when a much simpler
+	; series or parallel would work
+	(exists (resistor (n1 ?c1) (n2 ?other&~?c2&~?c3)))
+	(exists (resistor (n1 ?c2) (n2 ?other&~?c1&~?c3)))
+	(exists (resistor (n1 ?c3) (n2 ?other&~?c1&~?c2)))
+	?y <- (yCount ?c)
+=>
+	(removeResistor ?r1)
+	(removeResistor ?r2)
+	(removeResistor ?r3)
+	(bind ?sum (+ ?val1 ?val2 ?val3))
+	(addResistor (str-cat ?nm1 "y") ?c1 (str-cat y ?c) (/ (* ?val1 ?val3) ?sum))
+	(addResistor (str-cat ?nm2 "y") ?c2 (str-cat y ?c) (/ (* ?val1 ?val2) ?sum))
+	(addResistor (str-cat ?nm3 "y") ?c3 (str-cat y ?c) (/ (* ?val2 ?val3) ?sum))
+	(retract ?y)
+	(assert (yCount (+ ?c 1)))
+)
+
+
+(reset)
+(bind ?x (addResistor "r1" 1 2 5))
+(facts)
+(removeResistor ?x)
+(facts)
+
+; circuit 1
+(reset)
+(watch facts)
+(addResistor r1 a b 2)
+(addResistor r2 b c 2)
+(addResistor r3 b d 4)
+(addResistor r4 c d 3)
+(addResistor r5 c e 4)
+(addResistor r6 d e 2)
+(addResistor r0 e E 0)
+(run)
+(facts)
+
+; circuit 2
+(reset)
+(watch facts)
+(batch "circuit2.jess")
+(run)
+(facts)
+ 
