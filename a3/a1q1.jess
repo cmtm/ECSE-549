@@ -1,0 +1,7 @@
+; Assignment 3 Question 1
+; Chris Morin 260344722
+
+(deftemplate in (slot value) (slot pin) (slot gateName))
+
+(deftemplate out (slot value) (slot pin) (slot gateName))
+
