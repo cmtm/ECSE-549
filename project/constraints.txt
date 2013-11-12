@@ -1,0 +1,10 @@
+
+remove   parameter                                                                   value       plot
+         				 subtype                       soft        harshness
+         				        ==, >, >=, <, <=        (y/n)           [0.0, 1.0]
+button   drop down       dropdown                      checkbox     (number field) number field    pic
+         
+         
+         
+         custom          file
+

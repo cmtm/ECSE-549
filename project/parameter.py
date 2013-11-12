@@ -25,8 +25,8 @@ torque = Parameter("torque", "tau", 'Nm')
 
 # mechanical linear
 actuationLength = Parameter("actuation length", "l", "m")
-forceAtEnds = Parameter("force at end", "Fe", "N", "The force created in when the actuator is at the end of it's range of motion")
-forceAtMid = Parameter("force at mid point", "Fm", "N", "The force created in when the actuator is at the mid point of it's range of motion")
+force = Parameter("force", "F", "N")
+velocity = Parameter("velocity", "v", "m/s")
 
 # general
 power = Parameter("power", "P", "W")

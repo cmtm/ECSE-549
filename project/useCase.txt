@@ -1,0 +1,54 @@
+
+Following is the sequence of events that occur when using the advisor
+
+A = advisor
+U = user
+
+A: Present spec screen to user.
+
+U: Enter known specs.
+   Press "Suggest Device".
+
+A: Perform preliminary sanity check. This is a series of quick checks that
+   will occur before the advisor starts doing any serious computation. This saves
+   time by reporting obvious inconsistencies to the user early on. An possible
+   sanity check would be to ensure that the output power isn't higher than the
+   input power.
+
+
+*** 
+*  A: Sanity checks fail. Report failure to user along with how to fix it.
+*	
+*  U: Make required changes to specifications.
+*** 
+
+A: Upon sucess of all sanity checks, start to solve the system.
+
+
+*** 
+*  A: No solutions are possible, determine the "best" constraints that the
+*       user should relax. These constraints are found using heuristics.
+*       Report the failure to design a device to the user. In this report, provide
+*       detail about why it failed and the "best" constraints determined
+*       previously.
+*
+*  U: Make changes to specifications.
+*** 
+
+
+***
+*  A: More than one design is ties for best. In this case, there are likely an
+*     infinite amount of best solutions due to parameters being on a continuum.
+*     This provides an excellent oportunity to allow the user to specify
+*     additional constraints such as "keep cost as low as possible".
+*     If it is found that no extra constraints can reduce the solution space
+*     without brining it to zero, don't bother informing the user until the final
+*     results screen.
+* 
+*  U: Add extra constraints if desired.
+***
+
+A: Present final design to user. In the case of multiple designs, present them
+   all.
+
+U: Rejoice!
